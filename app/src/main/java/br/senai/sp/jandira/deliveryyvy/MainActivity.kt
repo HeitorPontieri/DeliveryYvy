@@ -7,10 +7,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.Button
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -20,6 +17,7 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
@@ -98,10 +96,28 @@ fun InicialMain() {
                 fontSize = 30.sp
             )
         }
-        Column(Modifier.fillMaxSize() .padding(bottom = 20.dp), verticalArrangement = Arrangement.Bottom, horizontalAlignment = Alignment.CenterHorizontally) {
-            Button(onClick = {}) {
-
+        Column(
+            Modifier
+                .fillMaxSize()
+                .padding(bottom = 20.dp),
+            verticalArrangement = Arrangement.Bottom,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Button(
+                onClick = {},
+                colors = ButtonDefaults.buttonColors(colorResource(id = R.color.green_yvy))
+            ) {
+                Text(
+                    text = stringResource(id = R.string.login),
+                    Modifier
+                        .clickable {}
+                        .width(130.dp),
+                    color = colorResource(id = R.color.white),
+                    fontSize = 24.sp,
+                    textAlign = TextAlign.Center
+                    )
             }
+            Spacer(modifier = Modifier.padding(120.dp))
             Text(
                 text = stringResource(id = R.string.signup),
                 Modifier.clickable {},
