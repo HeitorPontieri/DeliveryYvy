@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">DeliveryYvy</string>
+    <string name="yvypora">yvyporã</string>
+    <string name="yvypora_delivery">para entregas</string>
+    <string name="login">Login</string>
+    <string name="signup">Cadastre-se</string>
+    <string name="email">Email</string>
+    <string name="password">Senha</string>
+    <string name="entrar">Entrar</string>
+</resources>
