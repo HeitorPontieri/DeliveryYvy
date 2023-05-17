@@ -9,4 +9,6 @@
     <color name="white">#FFFFFFFF</color>
     <color name="darkgreen_yvy">#245501</color>
     <color name="green_yvy">#538D22</color>
+    <color name="gray_input">#F6F6F6</color>
+
 </resources>

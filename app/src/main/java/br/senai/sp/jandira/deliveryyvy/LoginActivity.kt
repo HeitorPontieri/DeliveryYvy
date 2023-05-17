@@ -4,19 +4,20 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Visibility
+import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
@@ -30,8 +31,7 @@ class LoginActivity : ComponentActivity() {
         setContent {
             DeliveryYvyTheme {
                 Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colors.background
+                    modifier = Modifier.fillMaxSize()
                 ) {
                     Login()
                 }
@@ -55,36 +55,52 @@ fun Login() {
 
 
 
-    Column {
+    Column(
+        Modifier
+            .fillMaxSize()
+            .padding(20.dp), verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally) {
         Text(
             text = stringResource(id = R.string.login),
             color = colorResource(id = R.color.green_yvy),
             fontSize = 48.sp
         )
+        Spacer(modifier = Modifier.padding(top = 30.dp))
         Text(
             text = stringResource(id = R.string.email),
             color = colorResource(id = R.color.darkgreen_yvy)
         )
-        TextField(value = emailState, onValueChange = { emailState = it })
+        Spacer(modifier = Modifier.padding(top = 10.dp))
+        TextField(
+            value = emailState,
+            onValueChange = { emailState = it },
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
+            colors = TextFieldDefaults.textFieldColors(backgroundColor = colorResource(id = R.color.gray_input))
+        )
+        Spacer(modifier = Modifier.padding(top = 15.dp))
         Text(
             text = stringResource(id = R.string.password),
             color = colorResource(id = R.color.darkgreen_yvy)
         )
+        Spacer(modifier = Modifier.padding(top = 10.dp))
         TextField(
             value = passwordState, onValueChange = { passwordState = it },
-            Modifier.clickable {passwordVisibility = true},
             trailingIcon = {
                 val img = if (passwordVisibility) {
+                    Icons.Filled.Visibility
+                } else Icons.Filled.VisibilityOff
+
+                IconButton(onClick = { passwordVisibility = !passwordVisibility }) {
                     Icon(
-                        painter = painterResource(id = R.drawable.eyeslash),
+                        imageVector = img,
                         contentDescription = null
                     )
-                } else Icon(
-                    painter = painterResource(id = R.drawable.eye),
-                    contentDescription = null
-                )
+                }
             },
+            visualTransformation = if (passwordVisibility) VisualTransformation.None else PasswordVisualTransformation(),
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+            colors = TextFieldDefaults.textFieldColors(backgroundColor = colorResource(id = R.color.gray_input))
         )
+        Spacer(modifier = Modifier.padding(top = 30.dp))
         Button(
             onClick = { /*TODO*/ },
             colors = ButtonDefaults.buttonColors(backgroundColor = Color.White),
