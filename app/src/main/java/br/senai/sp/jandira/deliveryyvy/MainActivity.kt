@@ -1,5 +1,6 @@
 package br.senai.sp.jandira.deliveryyvy
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -13,6 +14,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -45,6 +47,7 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun InicialMain() {
+    val context = LocalContext.current
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -87,13 +90,13 @@ fun InicialMain() {
                 text = stringResource(id = R.string.yvypora),
                 color = colorResource(id = R.color.darkgreen_yvy),
                 fontWeight = FontWeight.Bold,
-                fontSize = 30.sp
+                fontSize = 40.sp
             )
             Text(
                 text = stringResource(id = R.string.yvypora_delivery),
                 color = Color.White,
                 fontWeight = FontWeight.Medium,
-                fontSize = 30.sp
+                fontSize = 40.sp
             )
         }
         Column(
@@ -104,23 +107,30 @@ fun InicialMain() {
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Button(
-                onClick = {},
+                onClick = {
+                    val intent = Intent(context, LoginActivity()::class.java)
+                    context.startActivity(intent)
+                },
                 colors = ButtonDefaults.buttonColors(colorResource(id = R.color.green_yvy))
             ) {
                 Text(
                     text = stringResource(id = R.string.login),
                     Modifier
-                        .clickable {}
                         .width(130.dp),
                     color = colorResource(id = R.color.white),
-                    fontSize = 24.sp,
+                    fontSize = 30.sp,
                     textAlign = TextAlign.Center
-                    )
+                )
             }
             Spacer(modifier = Modifier.padding(120.dp))
             Text(
                 text = stringResource(id = R.string.signup),
-                Modifier.clickable {},
+                Modifier.clickable {
+                    /*
+                        -  TODO
+                            -FAZER A ACTIVITY DE CADASTRO
+                    */
+                },
                 color = colorResource(id = R.color.darkgreen_yvy),
                 fontSize = 30.sp,
                 textDecoration = TextDecoration.Underline
