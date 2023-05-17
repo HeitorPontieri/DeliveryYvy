@@ -30,6 +30,20 @@
             android:theme="@style/Theme.DeliveryYvy">
         </activity>
 
+        <activity
+            android:name=".PrincipalActivity"
+            android:exported="false"
+            android:label="@string/login"
+            android:theme="@style/Theme.DeliveryYvy">
+        </activity>
+
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyAxm5uYXu6Sm0SZGo8T5nHqATZtO90wZ1A" />
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
+
 
     </application>
 
