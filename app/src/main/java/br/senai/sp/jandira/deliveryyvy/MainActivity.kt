@@ -90,13 +90,13 @@ fun InicialMain() {
                 text = stringResource(id = R.string.yvypora),
                 color = colorResource(id = R.color.darkgreen_yvy),
                 fontWeight = FontWeight.Bold,
-                fontSize = 40.sp
+                fontSize = 38.sp
             )
             Text(
                 text = stringResource(id = R.string.yvypora_delivery),
                 color = Color.White,
                 fontWeight = FontWeight.Medium,
-                fontSize = 40.sp
+                fontSize = 35.sp
             )
         }
         Column(

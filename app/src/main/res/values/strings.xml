@@ -7,4 +7,12 @@
     <string name="email">Email</string>
     <string name="password">Password</string>
     <string name="entrar">Save</string>
+    <string name="new_delivery">New Delivery</string>
+    <string name="start">Start</string>
+    <string name="destination">Destination</string>
+    <string name="accepted">Accepted</string>
+    <string name="decline">Decline</string>
+    <string name="estimated_time">Estimated time</string>
+    <string name="collected_products">Collected products</string>
+    <string name="finish_delivery">Finish delivery</string>
 </resources>

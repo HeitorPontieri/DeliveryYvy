@@ -8,4 +8,12 @@
     <string name="email">Email</string>
     <string name="password">Senha</string>
     <string name="entrar">Entrar</string>
+    <string name="new_delivery">Entrega disponível</string>
+    <string name="start">Partida</string>
+    <string name="destination">Destino</string>
+    <string name="accepted">Aceitar</string>
+    <string name="decline">Recusar</string>
+    <string name="estimated_time">Tempo estimado</string>
+    <string name="collected_products">Produtos recolhidos:</string>
+    <string name="finish_delivery">Terminar corrida</string>
 </resources>
