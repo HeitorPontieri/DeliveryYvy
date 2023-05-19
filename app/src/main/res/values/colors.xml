@@ -12,5 +12,7 @@
     <color name="gray_input">#F6F6F6</color>
     <color name="lightgreen_yvy">#AAD576</color>
     <color name="red_button">#CA0E0E</color>
+    <color name="gray_star">#E5E4DE</color>
+    <color name="yellow_star">#F8DB43</color>
 
 </resources>
