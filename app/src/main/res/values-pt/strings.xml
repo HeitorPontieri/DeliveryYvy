@@ -14,6 +14,6 @@
     <string name="accepted">Aceitar</string>
     <string name="decline">Recusar</string>
     <string name="estimated_time">Tempo estimado</string>
-    <string name="collected_products">Produtos recolhidos:</string>
+    <string name="collected_products">Produtos recolhidos</string>
     <string name="finish_delivery">Terminar corrida</string>
 </resources>
