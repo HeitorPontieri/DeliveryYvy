@@ -15,4 +15,6 @@
     <string name="estimated_time">Estimated time</string>
     <string name="collected_products">Collected products</string>
     <string name="finish_delivery">Finish delivery</string>
+    <string name="email_error">\"Provide a valid email!\"</string>
+    <string name="message_error_pass1">Provide a password!</string>
 </resources>
