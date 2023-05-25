@@ -14,17 +14,17 @@ import kotlinx.coroutines.flow.map
 class TokenStore(private val context: Context) {
     // to make sure there's only one instance
     companion object {
-        private val Context.dataStoree: DataStore<Preferences> by preferencesDataStore("userToken")
+        private val Context.dataStore: DataStore<Preferences> by preferencesDataStore("userToken")
         val USER_TOKEN_KEY = stringPreferencesKey("user_token")
     }
 
 
-    val getToken: Flow<String> = context.dataStoree.data.map { preferences -> preferences[USER_TOKEN_KEY] ?: "" }
+    val getToken: Flow<String> = context.dataStore.data.map { preferences -> preferences[USER_TOKEN_KEY] ?: "" }
 
 
     //save email into datastore
     suspend fun saveToken(token: String) {
-        context.dataStoree.edit { preferences ->
+        context.dataStore.edit { preferences ->
             preferences[USER_TOKEN_KEY] = token
         }
     }

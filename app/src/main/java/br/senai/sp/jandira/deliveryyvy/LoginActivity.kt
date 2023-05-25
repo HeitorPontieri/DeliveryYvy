@@ -170,11 +170,11 @@ fun Login() {
                 val credentials = Credentials(emailState, passwordState)
 
                 auth(credentials) {
+                    Log.d("teste", it.token)
                     if (it.token.isNotEmpty()) {
                         scope.launch {
                             val dataStore = TokenStore(context)
                             dataStore.saveToken(it.token)
-
                             scope.launch {
                                 getDetailsOfUser(it.token) { user ->
                                     val userStore = UserStore(context)
@@ -190,7 +190,6 @@ fun Login() {
                                 }
                             }
                         }
-
                         // OPEN NEXT Activity
 //                        val intent = Intent(context, InicialScreen()::class.java)
 //                        context.startActivity(intent)
@@ -199,6 +198,11 @@ fun Login() {
                             .show()
                     }
                 }
+                val intent = Intent(
+                    context,
+                    PrincipalActivity()::class.java
+                )
+                context.startActivity(intent)
             },
             colors = ButtonDefaults.buttonColors(backgroundColor = Color.White),
             border = BorderStroke(3.dp, color = colorResource(id = R.color.green_yvy))

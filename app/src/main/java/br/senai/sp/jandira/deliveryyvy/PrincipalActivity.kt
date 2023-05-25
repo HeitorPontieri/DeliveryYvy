@@ -1,6 +1,7 @@
 package br.senai.sp.jandira.deliveryyvy
 
 import android.os.Bundle
+import android.util.Log
 import android.view.MotionEvent
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -21,6 +22,10 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.drawWithContent
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.input.pointer.pointerInput
@@ -95,7 +100,10 @@ fun CardOrder(order: Boolean) {
         mutableStateOf(order)
     }
     var stateDecision by rememberSaveable {
-        mutableStateOf(!order)
+        mutableStateOf(false)
+    }
+    var stateProduct by rememberSaveable {
+        mutableStateOf(false)
     }
 
     if (stateCard) {
@@ -163,7 +171,10 @@ fun CardOrder(order: Boolean) {
                     )
                     Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceAround) {
                         Button(
-                            onClick = { stateDecision = true },
+                            onClick = {
+                                stateCard = false
+                                stateDecision = true
+                            },
                             colors = ButtonDefaults.buttonColors(colorResource(R.color.green_yvy))
                         ) {
                             Text(
@@ -187,170 +198,154 @@ fun CardOrder(order: Boolean) {
                     }
                 }
             }
-            if (stateDecision){
-                Column(verticalArrangement = Arrangement.Bottom) {
-                    Row() {
-                        CardEntregador()
-                        CardRoute()
-                    }
+        }
+
+    }
+    if (stateDecision) {
+        Column(Modifier.fillMaxSize(), verticalArrangement = Arrangement.Bottom,  horizontalAlignment = Alignment.CenterHorizontally) {
+            Button(onClick = {
+                stateDecision = false
+                stateProduct = true
+            }) {
+
+            }
+            Row(
+                Modifier
+                    .height(250.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.Center
+            ) {
+                Card(Modifier.fillMaxWidth()) {
+                    CardsRoute()
                 }
 
+            }
 
+        }
+    }
+    if (stateProduct) {
+        Column(
+            Modifier
+                .fillMaxSize()
+                .padding(bottom = 10.dp),
+            verticalArrangement = Arrangement.Bottom,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+
+            RapidCard()
+            Card(
+                Modifier
+                    .height(150.dp)
+                    .fillMaxWidth(0.97f)
+                    .padding(top = 15.dp)
+            ) {
+
+                SlidingBarProduct()
             }
         }
 
     }
-
-
-
-
 
 }
 
 @Composable
 fun CardEntregador() {
-    Column(
-        Modifier.fillMaxSize(),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
+    Card(
+        Modifier
+            .width(190.dp)
+            .height(150.dp),
+        shape = RoundedCornerShape(15.dp),
+        backgroundColor = colorResource(id = R.color.lightgreen_yvy),
+        border = BorderStroke(
+            2.dp, color = colorResource(R.color.darkgreen_yvy),
+        )
     ) {
-        Card(
-            Modifier
-                .width(190.dp)
-                .height(150.dp),
-            shape = RoundedCornerShape(15.dp),
-            backgroundColor = colorResource(id = R.color.lightgreen_yvy),
-            border = BorderStroke(
-                2.dp, color = colorResource(R.color.darkgreen_yvy),
-            )
+        Column(
+            Modifier.fillMaxSize(),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.SpaceAround
         ) {
-            Column(
-                Modifier.fillMaxSize(),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.SpaceAround
+            Row(
+                Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically
             ) {
-                Row(
-                    Modifier.fillMaxWidth(),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Image(
-                        painter = painterResource(id = R.drawable.img_profile),
-                        contentDescription = null,
-                        Modifier
-                            .width(46.dp)
-                            .height(46.dp)
-                            .padding(start = 10.dp)
-                    )
-                    Text(
-                        text = "João",
-                        Modifier.padding(start = 10.dp),
-                        color = Color(R.color.darkgreen_yvy),
-                        fontSize = 28.sp
-                    )
-                }
-                Row(
-                    Modifier.fillMaxWidth(),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.SpaceBetween
-                ) {
-
-                    Image(
-                        painter = painterResource(id = R.drawable.icon_star),
-                        contentDescription = null,
-                        Modifier
-                            .width(24.dp)
-                            .height(24.dp),
-                        colorFilter = ColorFilter.tint(colorResource(R.color.yellow_star))
-
-                    )
-                    Image(
-                        painter = painterResource(id = R.drawable.icon_star),
-                        contentDescription = null,
-                        Modifier
-                            .width(24.dp)
-                            .height(24.dp),
-
-                        )
-                    Image(
-                        painter = painterResource(id = R.drawable.icon_star),
-                        contentDescription = null,
-                        Modifier
-                            .width(24.dp)
-                            .height(24.dp)
-                    )
-                    Image(
-                        painter = painterResource(id = R.drawable.icon_star),
-                        contentDescription = null,
-                        Modifier
-                            .width(24.dp)
-                            .height(24.dp)
-                    )
-                    Image(
-                        painter = painterResource(id = R.drawable.icon_star),
-                        contentDescription = null,
-                        Modifier
-                            .width(24.dp)
-                            .height(24.dp)
-                    )
-                    Text(text = "4.2", color = Color(R.color.darkgreen_yvy), fontSize = 20.sp)
-                }
-
-                Card(
-                    modifier = Modifier
-                        .height(60.dp)
-                        .width(60.dp),
-                    shape = CircleShape
-                ) {
-                    Image(
-                        painter = painterResource(id = R.drawable.icon_email),
-                        contentDescription = null
-                    )
-                }
-
-
+                Image(
+                    painter = painterResource(id = R.drawable.img_profile),
+                    contentDescription = null,
+                    Modifier
+                        .width(46.dp)
+                        .height(46.dp)
+                        .padding(start = 10.dp)
+                )
+                Text(
+                    text = "João",
+                    Modifier.padding(start = 10.dp),
+                    color = Color(R.color.darkgreen_yvy),
+                    fontSize = 28.sp
+                )
             }
-        }
-    }
-
-@Composable
-fun CardRoute() {
-        Card(
-            Modifier
-                .fillMaxWidth()
-                .height(200.dp),
-            shape = RoundedCornerShape(15.dp),
-            backgroundColor = colorResource(R.color.lightgreen_yvy),
-            border = BorderStroke(2.dp, color = colorResource(R.color.darkgreen_yvy))
-
-        ) {
-            Column(
-                Modifier.fillMaxSize(),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.SpaceEvenly
+            Row(
+                Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                Column(
-                    Modifier.fillMaxWidth(),
-                    horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center
-                ) {
-                    Text(text = stringResource(id = R.string.destination), fontSize = 24.sp)
-                    Text(text = "Rua Gloria N°45", fontSize = 20.sp)
-                }
-                Column(
-                    Modifier.fillMaxWidth(),
-                    verticalArrangement = Arrangement.Center,
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    Text(text = stringResource(id = R.string.estimated_time), fontSize = 24.sp)
-                    Text(text = "42 min", fontSize = 20.sp)
-                }
+
+                Image(
+                    painter = painterResource(id = R.drawable.icon_star),
+                    contentDescription = null,
+                    Modifier
+                        .width(24.dp)
+                        .height(24.dp),
+                    colorFilter = ColorFilter.tint(colorResource(R.color.yellow_star))
+
+                )
+                Image(
+                    painter = painterResource(id = R.drawable.icon_star),
+                    contentDescription = null,
+                    Modifier
+                        .width(24.dp)
+                        .height(24.dp),
+
+                    )
+                Image(
+                    painter = painterResource(id = R.drawable.icon_star),
+                    contentDescription = null,
+                    Modifier
+                        .width(24.dp)
+                        .height(24.dp)
+                )
+                Image(
+                    painter = painterResource(id = R.drawable.icon_star),
+                    contentDescription = null,
+                    Modifier
+                        .width(24.dp)
+                        .height(24.dp)
+                )
+                Image(
+                    painter = painterResource(id = R.drawable.icon_star),
+                    contentDescription = null,
+                    Modifier
+                        .width(24.dp)
+                        .height(24.dp)
+                )
+                Text(text = "4.2", color = Color(R.color.darkgreen_yvy), fontSize = 20.sp)
+            }
+
+            Card(
+                modifier = Modifier
+                    .height(60.dp)
+                    .width(60.dp),
+                shape = CircleShape
+            ) {
+                Image(
+                    painter = painterResource(id = R.drawable.icon_email),
+                    contentDescription = null
+                )
             }
 
 
         }
     }
-
-
 }
+
 
 @Composable
 fun RapidCard() {
@@ -427,14 +422,55 @@ fun RapidCard() {
     }
 }
 
+@Composable
+fun CardRoute() {
+    Card(
+        Modifier
+            .width(200.dp)
+            .height(200.dp),
+        shape = RoundedCornerShape(15.dp),
+        backgroundColor = colorResource(R.color.lightgreen_yvy),
+        border = BorderStroke(2.dp, color = colorResource(R.color.darkgreen_yvy))
+
+    ) {
+        Column(
+            Modifier.fillMaxSize(),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.SpaceEvenly
+        ) {
+            Column(
+                Modifier.fillMaxWidth(),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center
+            ) {
+                Text(text = stringResource(id = R.string.destination), fontSize = 24.sp)
+                Text(text = "Rua Gloria N°45", fontSize = 20.sp)
+            }
+            Column(
+                Modifier.fillMaxWidth(),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Text(text = stringResource(id = R.string.estimated_time), fontSize = 24.sp)
+                Text(text = "42 min", fontSize = 20.sp)
+            }
+        }
+
+
+    }
+}
+
 
 @Composable
 fun SlidingBarProduct() {
-
     var sliderPosition by remember { mutableStateOf(0.09f) }
 
-    Column(modifier = Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
-        RapidCard()
+
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(350.dp), horizontalAlignment = Alignment.CenterHorizontally
+    ) {
 
         Text(
             text = stringResource(id = R.string.collected_products) + "?",
@@ -442,7 +478,7 @@ fun SlidingBarProduct() {
             fontSize = 24.sp,
             color = colorResource(id = R.color.darkgreen_yvy)
         )
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(12.dp))
 
         Box(
             modifier = Modifier
@@ -473,6 +509,7 @@ fun SlidingBarProduct() {
                     )
                 }
         ) {
+
         }
     }
 }
@@ -527,17 +564,16 @@ fun SlidingBarOrder() {
 }
 
 @Composable
-fun B (){
-    Row(Modifier.fillMaxWidth()) {
-
+fun CardsRoute() {
+    Row(horizontalArrangement = Arrangement.SpaceEvenly) {
         CardEntregador()
-        Spacer(modifier = Modifier.padding(start = 10.dp))
         CardRoute()
     }
+
 }
 
 @Composable
-fun A() {
+fun CallPreview() {
     Column(
         Modifier.fillMaxWidth(),
         verticalArrangement = Arrangement.SpaceAround,
@@ -553,6 +589,6 @@ fun A() {
 @Composable
 fun Preview() {
     DeliveryYvyTheme {
-        A()
+        CallPreview()
     }
 }
