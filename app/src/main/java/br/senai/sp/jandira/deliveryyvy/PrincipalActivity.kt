@@ -202,7 +202,11 @@ fun CardOrder(order: Boolean) {
 
     }
     if (stateDecision) {
-        Column(Modifier.fillMaxSize(), verticalArrangement = Arrangement.Bottom,  horizontalAlignment = Alignment.CenterHorizontally) {
+        Column(
+            Modifier.fillMaxSize(),
+            verticalArrangement = Arrangement.Bottom,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
             Button(onClick = {
                 stateDecision = false
                 stateProduct = true
@@ -211,9 +215,14 @@ fun CardOrder(order: Boolean) {
             }
             Row(
                 Modifier
-                    .height(250.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.Center
+                    .height(250.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.Center
             ) {
-                Card(Modifier.fillMaxWidth()) {
+                Card(
+                    Modifier
+                        .fillMaxWidth()
+                ) {
                     CardsRoute()
                 }
 
@@ -229,17 +238,7 @@ fun CardOrder(order: Boolean) {
             verticalArrangement = Arrangement.Bottom,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-
-            RapidCard()
-            Card(
-                Modifier
-                    .height(150.dp)
-                    .fillMaxWidth(0.97f)
-                    .padding(top = 15.dp)
-            ) {
-
-                SlidingBarProduct()
-            }
+            SlidingBarProduct()
         }
 
     }
@@ -463,109 +462,154 @@ fun CardRoute() {
 
 @Composable
 fun SlidingBarProduct() {
+
     var sliderPosition by remember { mutableStateOf(0.09f) }
+    var sliderVisibility by remember { mutableStateOf(true) }
+
+    if (sliderVisibility) {
 
 
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(350.dp), horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-
-        Text(
-            text = stringResource(id = R.string.collected_products) + "?",
-            modifier = Modifier.align(Alignment.CenterHorizontally),
-            fontSize = 24.sp,
-            color = colorResource(id = R.color.darkgreen_yvy)
-        )
-        Spacer(modifier = Modifier.height(12.dp))
-
-        Box(
-            modifier = Modifier
-                .width(362.dp)
-                .height(50.dp)
-                .clip(RoundedCornerShape(15.dp))
-                .background(
-                    brush = Brush.horizontalGradient(
-                        0.0f to colorResource(id = R.color.lightgreen_yvy),
-                        0.5f to colorResource(R.color.green_yvy),
-                        1.0f to colorResource(R.color.dark_darkgreen),
-                        startX = 0f,
-                        endX = Float.POSITIVE_INFINITY
-                    )
-                )
-                .pointerInput(Unit) {
-                    detectDragGestures { change, dragAmount ->
-                        val position = (change.position.x - dragAmount.x) / size.width
-                        sliderPosition = position.coerceIn(0.09f, 0.9f)
-                    }
-                }
-                .drawWithContent {
-                    drawContent()
-                    drawCircle(
-                        color = Color.White,
-                        radius = 20.dp.toPx(),
-                        center = Offset(size.width * sliderPosition, size.height / 2)
-                    )
-                }
+        RapidCard()
+        Card(
+            Modifier
+                .height(150.dp)
+                .fillMaxWidth(0.97f)
+                .padding(top = 15.dp)
         ) {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(350.dp), horizontalAlignment = Alignment.CenterHorizontally
+            ) {
 
+
+                Text(
+                    text = stringResource(id = R.string.collected_products) + "?",
+                    modifier = Modifier.align(Alignment.CenterHorizontally),
+                    fontSize = 24.sp,
+                    color = colorResource(id = R.color.darkgreen_yvy)
+                )
+                Spacer(modifier = Modifier.height(12.dp))
+                Box(
+                    modifier = Modifier
+                        .width(362.dp)
+                        .height(50.dp)
+                        .clip(RoundedCornerShape(15.dp))
+                        .background(
+                            brush = Brush.horizontalGradient(
+                                0.0f to colorResource(id = R.color.lightgreen_yvy),
+                                0.5f to colorResource(R.color.green_yvy),
+                                1.0f to colorResource(R.color.dark_darkgreen),
+                                startX = 0f,
+                                endX = Float.POSITIVE_INFINITY
+                            )
+                        )
+                        .pointerInput(Unit) {
+                            detectDragGestures { change, dragAmount ->
+                                val position = (change.position.x - dragAmount.x) / size.width
+                                sliderPosition = position.coerceIn(0.09f, 0.9f)
+                                sliderVisibility = true
+                            }
+                        }
+                        .drawWithContent {
+                            drawContent()
+                            drawCircle(
+                                color = Color.White,
+                                radius = 20.dp.toPx(),
+                                center = Offset(size.width * sliderPosition, size.height / 2)
+                            )
+                        }
+                ) {}
+            }
         }
+
     }
+
+
+
+    if (sliderPosition == 0.9f) {
+        sliderVisibility = false
+        SlidingBarOrder()
+    }
+
+
 }
 
 @Composable
 fun SlidingBarOrder() {
-
+    var sliderVisibility by remember { mutableStateOf(true) }
     var sliderPosition by remember { mutableStateOf(0.09f) }
 
-    Column(modifier = Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
+
+    if(sliderVisibility){
         RapidCard()
-
-        Text(
-            text = stringResource(id = R.string.finish_delivery),
-            modifier = Modifier.align(Alignment.CenterHorizontally),
-            fontSize = 24.sp,
-            color = colorResource(id = R.color.darkgreen_yvy)
-        )
-        Spacer(modifier = Modifier.height(16.dp))
-
-        Box(
-            modifier = Modifier
-                .width(362.dp)
-                .height(50.dp)
-                .clip(RoundedCornerShape(15.dp))
-                .background(
-                    brush = Brush.horizontalGradient(
-                        0.0f to Color.LightGray,
-                        0.5f to Color.Red,
-                        1.0f to Color(243, 43, 43),
-                        startX = 0f,
-                        endX = Float.POSITIVE_INFINITY
-                    )
-                )
-                .pointerInput(Unit) {
-                    detectDragGestures { change, dragAmount ->
-                        val position = (change.position.x - dragAmount.x) / size.width
-                        sliderPosition = position.coerceIn(0.09f, 0.9f)
-                    }
-                }
-                .drawWithContent {
-                    drawContent()
-                    drawCircle(
-                        color = Color.White,
-                        radius = 20.dp.toPx(),
-                        center = Offset(size.width * sliderPosition, size.height / 2)
-                    )
-                }
+        Card(
+            Modifier
+                .height(150.dp)
+                .fillMaxWidth(0.97f)
+                .padding(top = 15.dp)
         ) {
+
+            Column(modifier = Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
+
+
+                Text(
+                    text = stringResource(id = R.string.finish_delivery),
+                    modifier = Modifier.align(Alignment.CenterHorizontally),
+                    fontSize = 24.sp,
+                    color = colorResource(id = R.color.darkgreen_yvy)
+                )
+                Spacer(modifier = Modifier.height(16.dp))
+
+                Box(
+                    modifier = Modifier
+                        .width(362.dp)
+                        .height(50.dp)
+                        .clip(RoundedCornerShape(15.dp))
+                        .background(
+                            brush = Brush.horizontalGradient(
+                                0.0f to Color.White,
+                                0.5f to Color.Red,
+                                1.0f to Color(243, 43, 43),
+                                startX = 0f,
+                                endX = Float.POSITIVE_INFINITY
+                            )
+                        )
+                        .pointerInput(Unit) {
+                            detectDragGestures { change, dragAmount ->
+                                val position = (change.position.x - dragAmount.x) / size.width
+                                sliderPosition = position.coerceIn(0.09f, 0.9f)
+                            }
+                        }
+                        .drawWithContent {
+                            drawContent()
+                            drawCircle(
+                                color = Color.White,
+                                radius = 20.dp.toPx(),
+                                center = Offset(size.width * sliderPosition, size.height / 2)
+                            )
+                        }
+                ) {
+                }
+            }
         }
+
     }
+    if(sliderPosition == 0.9f){
+        sliderVisibility = false
+        CardOrder(order = true)
+    
+    }
+
+
 }
 
 @Composable
 fun CardsRoute() {
-    Row(horizontalArrangement = Arrangement.SpaceEvenly) {
+    Row(
+        horizontalArrangement = Arrangement.SpaceEvenly,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
         CardEntregador()
         CardRoute()
     }
