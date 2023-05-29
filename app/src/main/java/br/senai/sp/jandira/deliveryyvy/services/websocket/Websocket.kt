@@ -1,10 +1,9 @@
-//compackage com.example.yvypora.services.websocket
-//
+//package br.senai.sp.jandira.deliveryyvy.services.websocket
 //import android.content.Context
 //import androidx.compose.runtime.Composable
 //import androidx.compose.runtime.collectAsState
-//import com.example.yvypora.constants.Constants
-//import com.example.yvypora.services.datastore.TokenStore
+//import br.senai.sp.jandira.deliveryyvy.constants.Constants
+//import br.senai.sp.jandira.deliveryyvy.services.datastore.TokenStore
 //
 //import io.socket.client.IO
 //import io.socket.client.Socket

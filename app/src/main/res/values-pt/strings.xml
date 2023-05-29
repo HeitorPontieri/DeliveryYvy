@@ -16,4 +16,8 @@
     <string name="estimated_time">Tempo estimado</string>
     <string name="collected_products">Produtos recolhidos</string>
     <string name="finish_delivery">Terminar corrida</string>
+    <string name="email_error">Infome um email válido</string>
+    <string name="message_error_pass1">Informe uma senha válida</string>
+    <string name="title_activity_delivery_chat">DeliveryChat</string>
+    <string name="back_screen">Shortcut to switch screen</string>
 </resources>

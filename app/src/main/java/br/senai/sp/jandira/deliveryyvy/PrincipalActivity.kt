@@ -1,5 +1,6 @@
 package br.senai.sp.jandira.deliveryyvy
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.MotionEvent
@@ -8,6 +9,7 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.gestures.draggable
@@ -30,6 +32,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.input.pointer.pointerInteropFilter
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
@@ -247,6 +250,7 @@ fun CardOrder(order: Boolean) {
 
 @Composable
 fun CardEntregador() {
+    val context = LocalContext.current
     Card(
         Modifier
             .width(190.dp)
@@ -331,7 +335,11 @@ fun CardEntregador() {
             Card(
                 modifier = Modifier
                     .height(60.dp)
-                    .width(60.dp),
+                    .width(60.dp)
+                    .clickable{
+                        val intent = Intent(context, DeliveryChat()::class.java)
+                        context.startActivity(intent)
+                    },
                 shape = CircleShape
             ) {
                 Image(
@@ -597,7 +605,6 @@ fun SlidingBarOrder() {
     }
     if(sliderPosition == 0.9f){
         sliderVisibility = false
-        CardOrder(order = true)
     
     }
 

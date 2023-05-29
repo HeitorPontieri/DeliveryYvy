@@ -32,6 +32,7 @@ import br.senai.sp.jandira.deliveryyvy.api.commons.getDetailsOfUser
 import br.senai.sp.jandira.deliveryyvy.ui.theme.DeliveryYvyTheme
 import br.senai.sp.jandira.deliveryyvy.api.commons.auth
 import br.senai.sp.jandira.deliveryyvy.dto.Credentials
+import br.senai.sp.jandira.deliveryyvy.models.TypeOfUser
 import br.senai.sp.jandira.deliveryyvy.services.datastore.UserStore
 import br.senai.sp.jandira.deliveryyvy.services.datastore.TokenStore
 import com.google.gson.Gson
@@ -73,6 +74,7 @@ fun Login() {
     var isPasswordErrorEmpty by remember {
         mutableStateOf(false)
     }
+
     val inputsFocusRequest = FocusRequester()
 
     val mMaxLength = 8
@@ -129,11 +131,11 @@ fun Login() {
         TextField(
             value = passwordState, onValueChange = {
 
-                if (it.isEmpty()) {
-                    isPasswordErrorEmpty = true
+                isPasswordErrorEmpty = if (it.isEmpty()) {
+                    true
                 } else {
-                    it.get(it.length - 1)
-                    isPasswordErrorEmpty = false
+                    it[it.length - 1]
+                    false
                 }
                 passwordState = it
             },
@@ -167,42 +169,7 @@ fun Login() {
 
         Button(
             onClick = {
-                val credentials = Credentials(emailState, passwordState)
-
-                auth(credentials) {
-                    Log.d("teste", it.token)
-                    if (it.token.isNotEmpty()) {
-                        scope.launch {
-                            val dataStore = TokenStore(context)
-                            dataStore.saveToken(it.token)
-                            scope.launch {
-                                getDetailsOfUser(it.token) { user ->
-                                    val userStore = UserStore(context)
-                                    scope.launch {
-                                        val gson = Gson()
-                                        userStore.saveDetails(gson.toJson(user))
-                                        val intent = Intent(
-                                            context,
-                                            PrincipalActivity()::class.java
-                                        )
-                                        context.startActivity(intent)
-                                    }
-                                }
-                            }
-                        }
-                        // OPEN NEXT Activity
-//                        val intent = Intent(context, InicialScreen()::class.java)
-//                        context.startActivity(intent)
-                    } else {
-                        Toast.makeText(context, "Nao foi possivel fazer Login!", Toast.LENGTH_SHORT)
-                            .show()
-                    }
-                }
-                val intent = Intent(
-                    context,
-                    PrincipalActivity()::class.java
-                )
-                context.startActivity(intent)
+                clickToLogin = true
             },
             colors = ButtonDefaults.buttonColors(backgroundColor = Color.White),
             border = BorderStroke(3.dp, color = colorResource(id = R.color.green_yvy))
@@ -217,6 +184,57 @@ fun Login() {
             )
         }
     }
+    val scope = rememberCoroutineScope()
+
+    if (clickToLogin) {
+
+
+//        LaunchedEffect(Unit) {
+//
+//
+//        }
+
+
+        val credentials = Credentials(emailState, passwordState)
+        auth(credentials) {
+            if (it.token.isNotEmpty()) {
+                scope.launch {
+                    val dataStore = TokenStore(context)
+                    dataStore.saveToken(it.token)
+                    scope.launch {
+                        getDetailsOfUser(it.token) { user ->
+                            val userStore = UserStore(context)
+                            scope.launch {
+                                userStore.saveDetails(Gson().toJson(user))
+                                Log.i("teste","detalhes -> $user")
+
+                                if(user.typeOf == TypeOfUser.DELIVERYMAN){
+                                    val intent = Intent(context, PrincipalActivity()::class.java)
+                                    context.startActivity(intent)
+                                }
+                                else{
+                                    Toast.makeText(context, "Nao foi possivel fazer Login!", Toast.LENGTH_SHORT).show()
+                                }
+                            }
+                        }
+                    }
+                }
+
+
+            }
+        }
+
+
+
+
+
+
+
+
+
+    }
+
 
 }
+
 
