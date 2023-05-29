@@ -17,4 +17,6 @@
     <string name="finish_delivery">Finish delivery</string>
     <string name="email_error">\"Provide a valid email!\"</string>
     <string name="message_error_pass1">Provide a password!</string>
+    <string name="title_activity_delivery_chat">DeliveryChat</string>
+    <string name="back_screen">Shortcut to switch screen</string>
 </resources>

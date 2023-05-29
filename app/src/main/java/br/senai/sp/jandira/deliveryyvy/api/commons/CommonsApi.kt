@@ -10,12 +10,12 @@ import retrofit2.Callback
 import retrofit2.Response
 
 
-fun  auth(credentials: Credentials, onComplete: (Token) -> Unit) {
+fun auth(credentials: Credentials, onComplete: (Token) -> Unit) {
     val call = RetrofitApi.commonsRetrofitService().auth(credentials)
 
     call.enqueue(object : Callback<Token> {
         override fun onResponse(call: Call<Token>, response: Response<Token>) {
-
+            Log.i("teste", response.toString())
             val res = response.body()
 
             Log.i("teste", res.toString())

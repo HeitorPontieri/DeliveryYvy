@@ -1,7 +1,9 @@
 package br.senai.sp.jandira.deliveryyvy
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
@@ -10,6 +12,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -26,7 +29,14 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
+import br.senai.sp.jandira.deliveryyvy.models.TypeOfUser
+import br.senai.sp.jandira.deliveryyvy.models.User
+import br.senai.sp.jandira.deliveryyvy.services.datastore.TokenStore
+import br.senai.sp.jandira.deliveryyvy.services.datastore.UserStore
 import br.senai.sp.jandira.deliveryyvy.ui.theme.DeliveryYvyTheme
+import com.google.gson.Gson
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -38,16 +48,59 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background
                 ) {
+
+                   ValidateUser()
                     InicialMain()
+
+
+
                 }
             }
         }
     }
 }
 
+@SuppressLint("CoroutineCreationDuringComposition")
+@Composable
+fun ValidateUser(){
+
+    val context = LocalContext.current
+    val scope = rememberCoroutineScope()
+    val token = TokenStore(context)
+
+    scope.launch {
+        token.getToken.collect { it ->
+            Log.d("token", "token coletado -> $it")
+            if (it.isNotEmpty()) {
+                val user = UserStore(context)
+
+                user.getDetails.collect() {
+                    try {
+
+                        val gson = Gson()
+                        val us = gson.fromJson(it.toString(), User::class.java)
+
+                        Log.d("user", "usuario ->$us")
+
+                        if (us?.typeOf == TypeOfUser.DELIVERYMAN) {
+                            val intent = Intent(context, PrincipalActivity::class.java)
+                            context.startActivity(intent)
+                        }
+                    } catch (err: Error) {
+                        err.printStackTrace()
+
+                    }
+                }
+            }
+        }
+    }
+}
+
+@SuppressLint("CoroutineCreationDuringComposition")
 @Composable
 fun InicialMain() {
     val context = LocalContext.current
+
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -138,6 +191,8 @@ fun InicialMain() {
         }
 
     }
+
+
 }
 
 
