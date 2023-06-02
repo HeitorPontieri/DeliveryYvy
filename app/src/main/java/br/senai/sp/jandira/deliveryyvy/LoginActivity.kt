@@ -204,16 +204,17 @@ fun Login() {
                     scope.launch {
                         getDetailsOfUser(it.token) { user ->
                             val userStore = UserStore(context)
+
                             scope.launch {
                                 userStore.saveDetails(Gson().toJson(user))
-                                Log.i("teste","detalhes -> $user")
+                                Log.i("teste", "detalhes -> $user")
 
-                                if(user.typeOf == TypeOfUser.DELIVERYMAN){
+                                if (user.typeOf == TypeOfUser.DELIVERYMAN) {
                                     val intent = Intent(context, PrincipalActivity()::class.java)
                                     context.startActivity(intent)
                                 }
-                                else{
-                                    Toast.makeText(context, "Nao foi possivel fazer Login!", Toast.LENGTH_SHORT).show()
+                                else {
+                                    Toast.makeText(context, "Não foi possivel fazer Login!", Toast.LENGTH_SHORT).show()
                                 }
                             }
                         }
@@ -223,13 +224,6 @@ fun Login() {
 
             }
         }
-
-
-
-
-
-
-
 
 
     }

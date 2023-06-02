@@ -2,13 +2,11 @@ package br.senai.sp.jandira.deliveryyvy.api.commons
 
 import br.senai.sp.jandira.deliveryyvy.dto.Credentials
 import br.senai.sp.jandira.deliveryyvy.dto.Token
+import br.senai.sp.jandira.deliveryyvy.models.Route
 import br.senai.sp.jandira.deliveryyvy.models.User
+import kotlinx.serialization.Serializable
 import retrofit2.Call
-import retrofit2.http.Body
-import retrofit2.http.GET
-import retrofit2.http.Header
-import retrofit2.http.POST
-
+import retrofit2.http.*
 
 
 interface _CommonsAPIService {
@@ -19,3 +17,4 @@ interface _CommonsAPIService {
     fun getDetailsOfUser(@Header("Authorization") token: String): Call<User>
 
 }
+

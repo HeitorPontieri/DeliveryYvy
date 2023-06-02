@@ -73,14 +73,10 @@ fun ValidateUser(){
             Log.d("token", "token coletado -> $it")
             if (it.isNotEmpty()) {
                 val user = UserStore(context)
-
                 user.getDetails.collect() {
                     try {
-
                         val gson = Gson()
                         val us = gson.fromJson(it.toString(), User::class.java)
-
-                        Log.d("user", "usuario ->$us")
 
                         if (us?.typeOf == TypeOfUser.DELIVERYMAN) {
                             val intent = Intent(context, PrincipalActivity::class.java)

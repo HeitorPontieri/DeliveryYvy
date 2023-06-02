@@ -1,7 +1,11 @@
 package br.senai.sp.jandira.deliveryyvy
 
+import android.app.Activity
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Bundle
+
 import android.util.Log
 import android.view.MotionEvent
 import androidx.activity.ComponentActivity
@@ -22,7 +26,7 @@ import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.ExperimentalComposeUiApi
+
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawWithContent
@@ -31,25 +35,33 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.input.pointer.pointerInput
-import androidx.compose.ui.input.pointer.pointerInteropFilter
+
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalDensity
+
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.IntOffset
+
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
+
+
 import br.senai.sp.jandira.deliveryyvy.ui.theme.DeliveryYvyTheme
+import com.google.android.gms.maps.GoogleMap
+
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
+
+
 import com.google.maps.android.compose.GoogleMap
 import com.google.maps.android.compose.Marker
 import com.google.maps.android.compose.MarkerState
 import com.google.maps.android.compose.rememberCameraPositionState
+import kotlin.reflect.jvm.internal.impl.descriptors.Visibilities.Local
+
 
 class PrincipalActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -69,11 +81,12 @@ class PrincipalActivity : ComponentActivity() {
 
 }
 
-
 @Composable
 fun Map() {
 
+    val origin = LatLng(-23.6666, -46.5322) // San Francisco, CA
     val paraty = LatLng(-23.2421, -44.6392)
+    val googleMap = remember { mutableStateOf<GoogleMap?>(null) }
     val cameraPositionState = rememberCameraPositionState {
         position = CameraPosition.fromLatLngZoom(paraty, 12f)
     }
@@ -83,7 +96,7 @@ fun Map() {
             modifier = Modifier
                 .fillMaxSize()
                 .zIndex(zIndex = -1f),
-            cameraPositionState = cameraPositionState
+            cameraPositionState = cameraPositionState,
         ) {
             Marker(
                 state = MarkerState(position = paraty),
@@ -91,14 +104,26 @@ fun Map() {
                 snippet = "Marker in the best place in the world"
             )
         }
-        CardOrder(order = true)
+        CardOrder(
+            order = true,
+            origin_lat = paraty.latitude.toString(),
+            origin_long = paraty.longitude.toString(),
+            destination_lat = origin.latitude.toString(),
+            destination_long = origin.longitude.toString()
+        )
 
     }
 
 }
 
 @Composable
-fun CardOrder(order: Boolean) {
+fun CardOrder(
+    order: Boolean,
+    origin_lat: String,
+    origin_long: String,
+    destination_lat: String,
+    destination_long: String
+) {
     var stateCard by rememberSaveable {
         mutableStateOf(order)
     }
@@ -108,6 +133,11 @@ fun CardOrder(order: Boolean) {
     var stateProduct by rememberSaveable {
         mutableStateOf(false)
     }
+    var _origin_lat = origin_lat
+    var _origin_long = origin_long
+    var _destination_lat = destination_lat
+    var _destination_long = destination_long
+    val context = LocalContext.current
 
     if (stateCard) {
         Column(
@@ -214,7 +244,19 @@ fun CardOrder(order: Boolean) {
                 stateDecision = false
                 stateProduct = true
             }) {
-
+                Text(text = "balao")
+            }
+            Button(onClick = {
+                val intencao = Intent(
+                    Intent.ACTION_VIEW,
+                    Uri.parse(
+                        "http://maps.google.com/maps?saddr=" + _origin_lat + " " + _origin_long + " " + "&daddr="
+                                + _destination_lat + " " + _destination_long
+                    )
+                )
+                context.startActivity(intencao)
+            }) {
+                Text(text = "ROTA")
             }
             Row(
                 Modifier
@@ -336,7 +378,7 @@ fun CardEntregador() {
                 modifier = Modifier
                     .height(60.dp)
                     .width(60.dp)
-                    .clickable{
+                    .clickable {
                         val intent = Intent(context, DeliveryChat()::class.java)
                         context.startActivity(intent)
                     },
@@ -549,7 +591,7 @@ fun SlidingBarOrder() {
     var sliderPosition by remember { mutableStateOf(0.09f) }
 
 
-    if(sliderVisibility){
+    if (sliderVisibility) {
         RapidCard()
         Card(
             Modifier
@@ -558,7 +600,10 @@ fun SlidingBarOrder() {
                 .padding(top = 15.dp)
         ) {
 
-            Column(modifier = Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
+            Column(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
 
 
                 Text(
@@ -603,9 +648,9 @@ fun SlidingBarOrder() {
         }
 
     }
-    if(sliderPosition == 0.9f){
+    if (sliderPosition == 0.9f) {
         sliderVisibility = false
-    
+
     }
 
 
