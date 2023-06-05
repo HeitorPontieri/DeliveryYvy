@@ -47,6 +47,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
+import androidx.datastore.dataStore
+import androidx.datastore.dataStoreFile
+import br.senai.sp.jandira.deliveryyvy.models.User
+import br.senai.sp.jandira.deliveryyvy.services.datastore.UserStore
 
 
 import br.senai.sp.jandira.deliveryyvy.ui.theme.DeliveryYvyTheme
@@ -54,12 +58,14 @@ import com.google.android.gms.maps.GoogleMap
 
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
+import com.google.gson.Gson
 
 
 import com.google.maps.android.compose.GoogleMap
 import com.google.maps.android.compose.Marker
 import com.google.maps.android.compose.MarkerState
 import com.google.maps.android.compose.rememberCameraPositionState
+import kotlinx.coroutines.launch
 import kotlin.reflect.jvm.internal.impl.descriptors.Visibilities.Local
 
 
@@ -81,35 +87,30 @@ class PrincipalActivity : ComponentActivity() {
 
 }
 
+
+
+
 @Composable
 fun Map() {
 
-    val origin = LatLng(-23.6666, -46.5322) // San Francisco, CA
-    val paraty = LatLng(-23.2421, -44.6392)
-    val googleMap = remember { mutableStateOf<GoogleMap?>(null) }
-    val cameraPositionState = rememberCameraPositionState {
-        position = CameraPosition.fromLatLngZoom(paraty, 12f)
-    }
-
+    val origin = LatLng(-23.528720, -46.897987) // SENAI
+    val paraty = LatLng(-23.2421, -44.6392) // Paraty
+        
     Box(Modifier.fillMaxSize()) {
-        GoogleMap(
+        Column(
             modifier = Modifier
                 .fillMaxSize()
-                .zIndex(zIndex = -1f),
-            cameraPositionState = cameraPositionState,
-        ) {
-            Marker(
-                state = MarkerState(position = paraty),
-                title = "Paraty",
-                snippet = "Marker in the best place in the world"
-            )
+                .zIndex(zIndex = -1f)
+                .background(colorResource(id = R.color.green_yvy)),
+        ){
+            Image(painter = painterResource(id =R.drawable.logo_no_name_transparent), contentDescription = null )
         }
         CardOrder(
             order = true,
-            origin_lat = paraty.latitude.toString(),
-            origin_long = paraty.longitude.toString(),
-            destination_lat = origin.latitude.toString(),
-            destination_long = origin.longitude.toString()
+            origin_lat = origin.latitude.toString(),
+            origin_long = origin.longitude.toString(),
+            destination_lat = paraty.latitude.toString(),
+            destination_long = paraty.longitude.toString()
         )
 
     }
@@ -235,28 +236,26 @@ fun CardOrder(
 
     }
     if (stateDecision) {
+
+        stateDecision = false
+        stateProduct = true
+
+        val intencao = Intent(
+            Intent.ACTION_VIEW,
+            Uri.parse(
+                "http://maps.google.com/maps?saddr=" + _origin_lat + " " + _origin_long + " " + "&daddr="
+                        + _destination_lat + " " + _destination_long
+            )
+        )
+        context.startActivity(intencao)
         Column(
             Modifier.fillMaxSize(),
             verticalArrangement = Arrangement.Bottom,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Button(onClick = {
-                stateDecision = false
-                stateProduct = true
             }) {
                 Text(text = "balao")
-            }
-            Button(onClick = {
-                val intencao = Intent(
-                    Intent.ACTION_VIEW,
-                    Uri.parse(
-                        "http://maps.google.com/maps?saddr=" + _origin_lat + " " + _origin_long + " " + "&daddr="
-                                + _destination_lat + " " + _destination_long
-                    )
-                )
-                context.startActivity(intencao)
-            }) {
-                Text(text = "ROTA")
             }
             Row(
                 Modifier
@@ -374,21 +373,7 @@ fun CardEntregador() {
                 Text(text = "4.2", color = Color(R.color.darkgreen_yvy), fontSize = 20.sp)
             }
 
-            Card(
-                modifier = Modifier
-                    .height(60.dp)
-                    .width(60.dp)
-                    .clickable {
-                        val intent = Intent(context, DeliveryChat()::class.java)
-                        context.startActivity(intent)
-                    },
-                shape = CircleShape
-            ) {
-                Image(
-                    painter = painterResource(id = R.drawable.icon_email),
-                    contentDescription = null
-                )
-            }
+
 
 
         }
@@ -398,6 +383,7 @@ fun CardEntregador() {
 
 @Composable
 fun RapidCard() {
+    val context = LocalContext.current
     Card(
         Modifier
             .width(550.dp)
@@ -464,8 +450,24 @@ fun RapidCard() {
                         .width(24.dp)
                         .height(24.dp)
                 )
+                Spacer(modifier = Modifier.padding(start = 10.dp))
+                Text(text = "4.2", color = colorResource(R.color.darkgreen_yvy), fontSize = 24.sp)
                 Spacer(modifier = Modifier.padding(start = 15.dp))
-                Text(text = "4.2", color = colorResource(R.color.darkgreen_yvy), fontSize = 26.sp)
+                Card(
+                    modifier = Modifier
+                        .height(55.dp)
+                        .width(55.dp)
+                        .clickable {
+                            val intent = Intent(context, DeliveryChat()::class.java)
+                            context.startActivity(intent)
+                        },
+                    shape = CircleShape
+                ) {
+                    Image(
+                        painter = painterResource(id = R.drawable.icon_email),
+                        contentDescription = null
+                    )
+                }
             }
         }
     }

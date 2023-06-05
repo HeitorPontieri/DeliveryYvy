@@ -165,8 +165,6 @@ fun Login() {
         }
         Spacer(modifier = Modifier.padding(top = 30.dp))
 
-        val scope = rememberCoroutineScope()
-
         Button(
             onClick = {
                 clickToLogin = true

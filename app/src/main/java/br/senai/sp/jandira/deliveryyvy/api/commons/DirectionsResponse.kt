@@ -1,7 +1,5 @@
 package br.senai.sp.jandira.deliveryyvy.api.commons
 
-import com.google.gson.annotations.SerializedName
-
 data class DirectionsResponse(
     val routes: List<Route>
 )
